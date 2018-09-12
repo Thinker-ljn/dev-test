@@ -1,5 +1,5 @@
 let fs = require('fs')
-const EXCEPTION = ['__', '.git']
+const EXCEPTION = ['.git']
 
 let temp = '<a href="{{href}}">{{name}}</a>'
 let links = []
