@@ -1,4 +1,4 @@
-let fs = require('fs')
+const fs = require('fs')
 const EXCEPTION = ['.git']
 
 let temp = '<a href="{{href}}">{{name}}</a>'
@@ -8,17 +8,17 @@ const walk = function (path) {
   let list = fs.readdirSync(path)
 
   list.forEach((filename) => {
+    let targetPath = path + '/' + filename
     let needIgnore = EXCEPTION && EXCEPTION.includes(filename)
-    let isDir = fs.statSync(path + '/' + filename).isDirectory()
+    let isDir = fs.statSync(targetPath).isDirectory()
 
     if (isDir && !needIgnore) {
-      let dirPath = path + '/' + filename
-      let indexTarget = dirPath + '/index.html'
+      let indexTarget = targetPath + '/index.html'
       let hasIndex = fs.existsSync(indexTarget)
       if (hasIndex) {
         let content = fs.readFileSync(indexTarget, 'utf-8')
-        let titleMatch = content.match(/<title>([^<]+)<\/title>/)
-        let name = titleMatch && titleMatch[1] ? titleMatch[1] : dirPath
+        let matchResult = content.match(/<title>([^<]+)<\/title>/)
+        let name = matchResult && matchResult[1] ? matchResult[1] : targetPath
         links.push({href: indexTarget, name: name})
       }
 
